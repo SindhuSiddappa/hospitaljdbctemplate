@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+<property name="url" value="jdbc:mysql://localhost:3306/skytech_database"/>
+<property name="username" value="root"/>
+<property name="password" value="root"/>
+    <property value="com.mysql.cj.jdbc.Driver" name="driverClassName"/>
+</bean>
+
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+<property name="dataSource" ref="dataSource"/>
+</bean>
+
+    <bean id="patientDao" class="sample.dao.impl.PatientDaoImpl">
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+
+
+   <bean id="patientService" class="sample.service.impl.PatientServiceImpl">
+       <property name="patientDao" ref="patientDao"/>
+   </bean>
+
+    <bean class="org.springframework.web.client.RestTemplate" id="restTemplate">
+
+    </bean>
+    <bean class="sample.rest.impl.PatientRestImpl" id="patientRest">
+
+    </bean>
+
+    <bean id="patientValidator" class="sample.validator.PatientValidator"/>
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"/>
+    </bean>
+</beans>
